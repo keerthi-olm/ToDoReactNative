@@ -17,17 +17,19 @@ export default class ToDoApp extends React.Component {
   render() {
     return (
        <View style={styles.App}>
-        <View id="list" >
-          <View className="header" ><Text lassName='title' >My to do list </Text></View>
-          <View className="add_reset_section">
+        <View id="list" style={styles.widgetUl} >
+          <View className="header" style={styles.header} >
+            <Text lassName='title' >My to do list </Text>
+           </View>
+           <View className="add_reset_section">
             <TextInput placeholder="Add a new task..."/>
-          </View>
-          <View className="button add">
+           </View>
+           <View className="button add">
             <Button onClick={this._handleAddItem} title='press' >Add</Button>
-          </View>
-          <View className="button reset">
+           </View>
+           <View className="button reset">
             <Button onClick={this._handleResetList} title='press'/>
-          </View>
+           </View>
             {this.state.list.map((value, i) => {
             return <ToDoList key={i}  item={value} />;
           })}       
@@ -68,7 +70,7 @@ class ToDoList extends React.Component {
     let text = this.state.checked ? <strike>{this.state.value}</strike> : this.state.value;
     let checked= this.state.checked ? 'checked' : '';
     return (
-      <View className="main">
+      <View className="main" style={styles.main}>
         <CheckBox  onChange={this._handleCheckBoxClick}  /><Text>{text}</Text>
       </View>
     );
@@ -83,5 +85,27 @@ const styles = StyleSheet.create({
     "fontFamily": "sans-serif",
     "textAlign": "center",
     "fontSize": 52
-  }
+  }, 
+  "widgetUl": {
+    "padding": 0,
+    "margin": 0,
+    "height": 200,
+    "display": "flex",
+    "justifyContent": "space-around",
+    flexDirection:'row',
+    flexWrap:'wrap',
+    "alignItems": "stretch"
+  }, 
+  "header": {
+    "flexBasis": 1,
+    "flexGrow":1
+  },
+  "footer": {
+    "flexBasis": 0.9,
+     "flexGrow":1
+  },
+  "main": {
+    "flex": 1
+    , "flexGrow":1
+  },
 });

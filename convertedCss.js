@@ -4,7 +4,7 @@
     "textAlign": "center",
     "fontSize": "1.5em"
   },
-  "widget_ul": {
+  "widgetUl": {
     "padding": "0",
     "margin": "0",
     "listStyle": "none",
