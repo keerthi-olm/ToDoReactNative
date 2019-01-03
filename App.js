@@ -22,26 +22,46 @@ export default class ToDoApp extends React.Component {
             <Text lassName='title' >My to do list </Text>
            </View>
            <View className="add_reset_section" style={styles.addResetSection}>
-            <TextInput placeholder="Add a new task..."/>
+            <TextInput ref={(ref) => this.newItem = ref} placeholder="Add a new task..."/>
            </View>
            <View className="button add" style={{'flex':1}}>
-            <TouchableOpacity onClick={this._handleAddItem} title='Add' style={styles.button}><Text style={styles.textBt} >Add </Text></TouchableOpacity>
+            <TouchableOpacity onPress={this._handleAddItem} title='Add' style={styles.button}><Text style={styles.textBt} >Add </Text></TouchableOpacity>
            </View>
            <View className="button reset" style={{'flex':1}}>
             
-                        <TouchableOpacity onClick={this._handleAddItem} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this._handleAddItem} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
  
            </View>
             {this.state.list.map((value, i) => {
             return <ToDoList key={i}  item={value} />;
           })}       
-          <View className="footer" style={{ "flexBasis": 250}}><Button style={styles.button} className='remove'  onClick={this._handleRemoveDoneItems}  title='press' >
-          Remove
-        </Button></View>
+          <View className="footer" style={{ "flexBasis": 250}}>
+
+                        <TouchableOpacity onPress={this._handleAddItem} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
+ 
+        </View>
         </View>
       </View>
     );
   }
+   _handleAddItem = () => {
+    let newItem =this.newItem._lastNativeText;
+       if (newItem!=='') {
+        this.setState({ list: [...this.state.list, newItem] });
+
+        // this.doneList[this.state.list.length]=false;
+        console.log(this.doneList);
+
+        console.log("\n ***Add Button Pressed... **");
+        console.log(
+          "Add handler will pull value from the input field and set the new state for ToDO app"
+        );
+        console.log(
+          "Tip : You can use React.createRef() to reference Virtual DOM elements.  ");
+     }
+   
+
+  };
 }
 ToDoApp.propTypes = {
   list: PropTypes.array
