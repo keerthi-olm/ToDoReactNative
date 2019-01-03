@@ -29,11 +29,11 @@ export default class ToDoApp extends React.Component {
            </View>
            <View className="button reset" style={{'flex':1}}>
             
-                        <TouchableOpacity onPress={this._handleAddItem} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this._handleResetList} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
  
            </View>
             {this.state.list.map((value, i) => {
-            return <ToDoList key={i}  item={value} />;
+            return <ToDoList key={i}  item={value} removeItem={this._handleUpdateDoneList}/>;
           })}       
           <View className="footer" style={{ "flexBasis": 250}}>
 
@@ -62,6 +62,38 @@ export default class ToDoApp extends React.Component {
    
 
   };
+
+     _handleResetList = () => {
+    //  let newItem =this.refs.newItem.value;
+    console.log("\n ***Reset Button Pressed... **");
+    console.log(
+      "Reset handler will reset list to default values..." +
+        JSON.stringify(ToDoApp.defaultProps.list)
+    );
+
+    this.setState({ list: [...ToDoApp.defaultProps.list] });
+  };
+
+    _handleUpdateDoneList = id => {
+
+
+      let checkIfInDoneList = this.doneList.filter(function (val) {
+          return (val === id);
+      });
+
+      if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
+      // add to list
+      this.doneList.push(id);
+      } else {
+      //delete from list
+      this.doneList= this.doneList.filter(function (val) {
+          return (val !== id);
+      });
+      }
+           console.log('donelist afterremove-->');
+           console.log(this.doneList);
+
+  };
 }
 ToDoApp.propTypes = {
   list: PropTypes.array
@@ -81,15 +113,28 @@ class ToDoList extends React.Component {
   componentWillReceiveProps(nextProps) {
     
   }
+   componentWillReceiveProps(nextProps) {
+    if (nextProps.item !== this.props.item)
+      this.setState({ ...this.state, value: nextProps.item , checked:false});
+    console.log(
+      'ToDoList -> componentWillReceiveProps : detected property change..."' +
+        nextProps.item +
+        "--" +
+        this.props.item
+    );
+  }
   _handleCheckBoxClick = (e) => {
-    
+    this.setState({
+      checked: !this.state.checked
+    });
+   this.props.removeItem(e.target.id);
   }
 
   render() {
     /** RENDER  **/
     console.log("-- render");
     
-    let text = this.state.checked ? <strike>{this.state.value}</strike> : this.state.value;
+    let text = this.state.checked ? <Text>{this.state.value}</Text> : this.state.value;
     let checked= this.state.checked ? 'checked' : '';
     return (
       <View className="main" style={styles.main} style={{'flex':11, "flexBasis": 250 ,'flexDirection':'row'}}>
