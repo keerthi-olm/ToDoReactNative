@@ -30,21 +30,17 @@ componentWillUpdate(nextProps, nextState) {
             <TextInput ref={(ref) => this.newItem = ref} placeholder="Add a new task..."/>
            </View>
            <View className="button add" style={{'flex':1}}>
-            <TouchableOpacity onPress={this._handleAddItem} title='Add' style={styles.button}><Text style={styles.textBt} >Add </Text></TouchableOpacity>
+             <TouchableOpacity onPress={this._handleAddItem} title='Add' style={styles.button}><Text style={styles.textBt} >Add </Text></TouchableOpacity>
            </View>
            <View className="button reset" style={{'flex':1}}>
-            
-                        <TouchableOpacity onPress={this._handleResetList} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
- 
+             <TouchableOpacity onPress={this._handleResetList} title='Reset' style={styles.button}><Text  style={styles.textBt}>Reset </Text></TouchableOpacity>
            </View>
             {this.state.list.map((value, i) => {
             return <ToDoList key={i}  item={value} removeItem={this._handleUpdateDoneList} id={i}/>;
           })}       
           <View className="footer" style={{ "flexBasis": 250}}>
-
-                        <TouchableOpacity onPress={this._handleRemoveDoneItems} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
- 
-        </View>
+            <TouchableOpacity onPress={this._handleRemoveDoneItems} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -53,6 +49,7 @@ componentWillUpdate(nextProps, nextState) {
     let newItem =this.newItem._lastNativeText;
        if (newItem!=='') {
         this.setState({ list: [...this.state.list, newItem] });
+        this.newItem.clear();
 
         // this.doneList[this.state.list.length]=false;
         console.log(this.doneList);
@@ -68,7 +65,7 @@ componentWillUpdate(nextProps, nextState) {
 
   };
 
-     _handleResetList = () => {
+  _handleResetList = () => {
     //  let newItem =this.refs.newItem.value;
     console.log("\n ***Reset Button Pressed... **");
     console.log(
@@ -181,16 +178,16 @@ const styles = StyleSheet.create({
     "margin": 0,
     "display": "flex",
     "justifyContent": "space-around",
-    flexDirection:'row',
-    flexWrap:'wrap',
+    "flexDirection":'row',
+    "flexWrap":'wrap',
     "alignItems": "stretch",
-    alignItems: 'center'
+    "alignItems": 'center'
   }, 
   "header": {
     "flexBasis": 250,
     "flex":1,
     "backgroundColor": '#2ec76e',
-    padding: 10,
+    "padding": 10,
   },
   "footer": {
     "flexBasis": 250,
@@ -209,7 +206,7 @@ const styles = StyleSheet.create({
 "textBt": {
    "color":"#fff"
 },
-  button: {
+  "button": {
     'alignItems': 'center',
     'backgroundColor': '#f44336',
    'padding': 10,
