@@ -13,7 +13,12 @@ export default class ToDoApp extends React.Component {
 
   }
 
-
+componentWillUpdate(nextProps, nextState) {
+   console.log('will update');
+       this.doneList=[];
+    this.list=[...nextState.list];
+    console.log(this.list);
+}
   render() {
     return (
        <View style={styles.App}>
@@ -33,11 +38,11 @@ export default class ToDoApp extends React.Component {
  
            </View>
             {this.state.list.map((value, i) => {
-            return <ToDoList key={i}  item={value} removeItem={this._handleUpdateDoneList}/>;
+            return <ToDoList key={i}  item={value} removeItem={this._handleUpdateDoneList} id={i}/>;
           })}       
           <View className="footer" style={{ "flexBasis": 250}}>
 
-                        <TouchableOpacity onPress={this._handleAddItem} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this._handleRemoveDoneItems} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
  
         </View>
         </View>
@@ -94,6 +99,21 @@ export default class ToDoApp extends React.Component {
            console.log(this.doneList);
 
   };
+
+    _handleRemoveDoneItems = e => {
+
+
+    this.doneList.sort((a, b) => a - b);
+    console.log(this.doneList);
+    for (var i = this.doneList.length -1; i >= 0; i--)
+       this.list.splice(this.doneList[i],1);
+
+    this.setState({ list: [...this.list] });
+   
+    console.log(this.list);
+    this.doneList=[];
+
+  };
 }
 ToDoApp.propTypes = {
   list: PropTypes.array
@@ -127,7 +147,8 @@ class ToDoList extends React.Component {
     this.setState({
       checked: !this.state.checked
     });
-   this.props.removeItem(e.target.id);
+   this.props.removeItem(this.props.id);
+   console.log(this.props.id);
   }
 
   render() {
@@ -138,7 +159,7 @@ class ToDoList extends React.Component {
     let checked= this.state.checked ? 'checked' : '';
     return (
       <View className="main" style={styles.main} style={{'flex':11, "flexBasis": 250 ,'flexDirection':'row'}}>
-        <CheckBox  onChange={this._handleCheckBoxClick}  /><Text>{text}</Text>
+        <CheckBox  onValueChange={this._handleCheckBoxClick} value={this.state.checked} /><Text>{text}</Text>
       </View>
     );
   }
