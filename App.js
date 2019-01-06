@@ -4,30 +4,27 @@ import { StyleSheet, Text, View ,Button,TextInput,CheckBox,TouchableOpacity} fro
 
 export default class ToDoApp extends React.Component {
 
-    constructor(props) {
+  constructor(props) {
     super();
     this.state = { list: props.list, doneList:props.doneList };
     this.doneList=[...props.doneList];
     this.list=[...this.state.list];
-
-
   }
 
-componentWillUpdate(nextProps, nextState) {
-   console.log('will update');
-       this.doneList=[];
+  componentWillUpdate(nextProps, nextState) {
+
+    this.doneList=[];
     this.list=[...nextState.list];
-    console.log(this.list);
-}
+  }
   render() {
     return (
        <View style={styles.App}>
         <View id="list" style={styles.widgetUl} >
           <View style={styles.header} >
-            <Text lassName='title' >My to do list </Text>
+            <Text style={styles.textHd,styles.App} lassName='title' >My to do list </Text>
            </View>
            <View className="add_reset_section" style={styles.addResetSection}>
-            <TextInput ref={(ref) => this.newItem = ref} placeholder="Add a new task..."/>
+            <TextInput style={styles.input}  ref={(ref) => this.newItem = ref} placeholder="Add a new task..."/>
            </View>
            <View className="button add" style={{'flex':1}}>
              <TouchableOpacity onPress={this._handleAddItem} title='Add' style={styles.button}><Text style={styles.textBt} >Add </Text></TouchableOpacity>
@@ -39,77 +36,45 @@ componentWillUpdate(nextProps, nextState) {
             return <ToDoList key={i}  item={value} removeItem={this._handleUpdateDoneList} id={i}/>;
           })}       
           <View className="footer" style={{ "flexBasis": 250}}>
-            <TouchableOpacity onPress={this._handleRemoveDoneItems} title='Remove' style={styles.button}><Text  style={styles.textBt}>Remove </Text></TouchableOpacity>
+            <TouchableOpacity onPress={this._handleRemoveDoneItems} title='Remove' style={styles.button}><Text    style={styles.textBt}>Remove </Text></TouchableOpacity>
           </View>
         </View>
       </View>
     );
   }
-   _handleAddItem = () => {
+  _handleAddItem = () => {
     let newItem =this.newItem._lastNativeText;
-       if (newItem!=='') {
-        this.setState({ list: [...this.state.list, newItem] });
-        this.newItem.clear();
-
-        // this.doneList[this.state.list.length]=false;
-        console.log(this.doneList);
-
-        console.log("\n ***Add Button Pressed... **");
-        console.log(
-          "Add handler will pull value from the input field and set the new state for ToDO app"
-        );
-        console.log(
-          "Tip : You can use React.createRef() to reference Virtual DOM elements.  ");
-     }
-   
-
+    if (newItem!=='') {
+      this.setState({ list: [...this.state.list, newItem] });
+      this.newItem.clear();
+    }
   };
 
   _handleResetList = () => {
-    //  let newItem =this.refs.newItem.value;
-    console.log("\n ***Reset Button Pressed... **");
-    console.log(
-      "Reset handler will reset list to default values..." +
-        JSON.stringify(ToDoApp.defaultProps.list)
-    );
-
     this.setState({ list: [...ToDoApp.defaultProps.list] });
   };
 
-    _handleUpdateDoneList = id => {
-
-
-      let checkIfInDoneList = this.doneList.filter(function (val) {
-          return (val === id);
-      });
-
-      if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
-      // add to list
-      this.doneList.push(id);
-      } else {
-      //delete from list
-      this.doneList= this.doneList.filter(function (val) {
-          return (val !== id);
-      });
-      }
-           console.log('donelist afterremove-->');
-           console.log(this.doneList);
-
+  _handleUpdateDoneList = id => {
+    let checkIfInDoneList = this.doneList.filter(function (val) {
+        return (val === id);
+    });
+    if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
+    // add to list
+    this.doneList.push(id);
+    } else {
+    //delete from list
+    this.doneList= this.doneList.filter(function (val) {
+        return (val !== id);
+    });
+    }
   };
 
-    _handleRemoveDoneItems = e => {
-
-
+  _handleRemoveDoneItems = e => {
     this.doneList.sort((a, b) => a - b);
-    console.log(this.doneList);
     for (var i = this.doneList.length -1; i >= 0; i--)
        this.list.splice(this.doneList[i],1);
-
     this.setState({ list: [...this.list] });
-   
-    console.log(this.list);
     this.doneList=[];
-
   };
 }
 ToDoApp.propTypes = {
@@ -124,39 +89,27 @@ ToDoApp.defaultProps = {
 class ToDoList extends React.Component {
   constructor(props) {
     super();
-     this.state = { value: props.item , checked:false};
+    this.state = { value: props.item , checked:false};
    
   }
   componentWillReceiveProps(nextProps) {
-    
-  }
-   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item)
       this.setState({ ...this.state, value: nextProps.item , checked:false});
-    console.log(
-      'ToDoList -> componentWillReceiveProps : detected property change..."' +
-        nextProps.item +
-        "--" +
-        this.props.item
-    );
   }
   _handleCheckBoxClick = (e) => {
     this.setState({
       checked: !this.state.checked
     });
    this.props.removeItem(this.props.id);
-   console.log(this.props.id);
   }
 
   render() {
     /** RENDER  **/
-    console.log("-- render");
-    
     let text = this.state.checked ? <Text>{this.state.value}</Text> : this.state.value;
     let checked= this.state.checked ? 'checked' : '';
     return (
       <View className="main" style={styles.main} style={{'flex':11, "flexBasis": 250 ,'flexDirection':'row'}}>
-        <CheckBox  onValueChange={this._handleCheckBoxClick} value={this.state.checked} /><Text>{text}</Text>
+        <CheckBox  onValueChange={this._handleCheckBoxClick} value={this.state.checked} /><Text style={styles.textBd}>{text}</Text>
       </View>
     );
   }
@@ -169,8 +122,8 @@ const styles = StyleSheet.create({
   "App": {
     "fontFamily": "sans-serif",
     "textAlign": "center",
-    "fontSize": 52,
-        "paddingTop": 30,
+    "fontSize": 30,
+        "paddingTop": 10,
 
   }, 
   "widgetUl": {
@@ -186,8 +139,7 @@ const styles = StyleSheet.create({
   "header": {
     "flexBasis": 250,
     "flex":1,
-    "backgroundColor": '#2ec76e',
-    "padding": 10,
+    "padding": 10
   },
   "footer": {
     "flexBasis": 250,
@@ -202,9 +154,21 @@ const styles = StyleSheet.create({
   },
   "addResetSection": {
    "flexBasis":200,
+   "padding":5
+},
+  "input": {
+   "paddingBottom":15,
+    "paddingTop":5,
+    fontSize:20
 },
 "textBt": {
    "color":"#fff"
+},
+"textBd": {
+   "fontSize":20
+},
+"textHd": {
+   "fontSize":30
 },
   "button": {
     'alignItems': 'center',
